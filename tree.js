@@ -88,7 +88,7 @@ return function(column){
 		listeners.push(aspect.after(grid, "insertRow", function(rowElement){
 			// Auto-expand (shouldExpand) considerations
 			var row = this.row(rowElement),
-				expanded = column.shouldExpand(row, currentLevel, this._expanded[row.id]);
+				expanded = column.shouldExpand(row, currentLevel, grid._expanded[row.id]);
 			
 			if(expanded){ this.expand(rowElement, true, true); }
 			return rowElement; // pass return value through
@@ -112,7 +112,7 @@ return function(column){
 			// Clear out the _expanded hash on each call to cleanup
 			// (which generally coincides with refreshes, as well as destroy).
 			listeners.push(aspect.after(grid, "cleanup", function(){
-				this._expanded = {};
+				grid._expanded = {};
 			}));
 		}
 		
@@ -141,7 +141,7 @@ return function(column){
 			
 			if(target && target.mayHaveChildren){
 				// toggle or set expand/collapsed state based on optional 2nd argument
-				var expanded = expand === undefined ? !this._expanded[row.id] : expand;
+				var expanded = expand === undefined ? !grid._expanded[row.id] : expand;
 				
 				// update the expando display
 				target.className = "dgrid-expando-icon ui-icon ui-icon-triangle-1-" + (expanded ? "se" : "e");
@@ -245,9 +245,9 @@ return function(column){
 				
 				// Update _expanded map.
 				if(expanded){
-					this._expanded[row.id] = true;
+					grid._expanded[row.id] = true;
 				}else{
-					delete this._expanded[row.id];
+					delete grid._expanded[row.id];
 				}
 			}
 		}; // end function grid.expand
